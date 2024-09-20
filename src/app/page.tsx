@@ -13,6 +13,7 @@ import DiscoverTokens from '@/components/DiscoverTokens/DiscoverTokens';
 import Banner from '@/components/Banner/Banner';
 import Footer from '@/components/Footer/Footer';
 import { RAYDIUM_MAINNET, Clmm } from '@raydium-io/raydium-sdk';
+import CreateToken from './create-token/page';
 
 export default function Home() {
 
@@ -75,11 +76,12 @@ export default function Home() {
   
   return (
     <main className='w-full min-w-[100vw] h-full min-h-screen bg-secondary-300'>
-      <LandingHeader />
+      {/* <LandingHeader />
       <HotTokens />
       <DiscoverTokens />
       <Banner />
-      <Footer />
+      <Footer /> */}
+      <CreateToken />
       {/* <div className="bg-slate-900 w-full">
         <div className="w-2/5 py-32 m-auto">
           <div>

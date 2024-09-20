@@ -30,7 +30,7 @@ let mintAddress: PublicKey | undefined = undefined;
 let marketId: PublicKey | null = null;
 let lpMint: PublicKey | null | undefined = null;
 
-export default function Home() {
+export default function CreateToken() {
 
     const wallet = useWallet()
     const { connection } = useConnection()
