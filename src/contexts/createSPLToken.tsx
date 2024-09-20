@@ -3,7 +3,7 @@ import { Connection, PublicKey, Transaction, SystemProgram, Keypair, Transaction
 import { WalletContextState } from "@solana/wallet-adapter-react";
 import { Dispatch, SetStateAction } from 'react';
 import { PROGRAM_ID, DataV2, createCreateMetadataAccountV3Instruction } from '@metaplex-foundation/mpl-token-metadata';
-import { bundlrStorage, Metaplex, MetaplexFileTag, walletAdapterIdentity, } from '@metaplex-foundation/js';
+import { Metaplex, MetaplexFileTag, walletAdapterIdentity, bundlrStorage} from '@metaplex-foundation/js';
 
 export async function createSPLToken(owner: PublicKey, wallet: WalletContextState, connection: Connection, quantity: number, decimals: number, isChecked: boolean, tokenName: string, symbol: string, metadataURL: string, description: string, file: Readonly<{
     buffer: Buffer;
@@ -19,15 +19,30 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
         console.log("creating spl token")
         // setIscreating(true)
         // setTokenAddresss('')
+        if(wallet.publicKey) {
+            console.log("getting balance ===>");
+            const balance = await connection.getBalance(wallet.publicKey);
+            console.log("balance ===>", balance);
+        }
 
-        const metaplex = Metaplex.make(connection)
+        const metaplex = Metaplex.make(connection, {cluster: 'devnet'})
             .use(walletAdapterIdentity(wallet))
             .use(bundlrStorage({
-                address: 'https://node1.bundlr.network',
-                providerUrl: "https://cosmopolitan-greatest-wave.solana-mainnet.quiknode.pro/85222162e13661be38ab86fe26925e667496812d/",
-                timeout: 60000,
+                address : 'https://devnet.bundlr.network',
+                // address : 'https://node1.bundlr.network',
+                providerUrl: "https://devnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
+                // providerUrl : "https://mainnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
+                // providerUrl : "https://solana-devnet.g.alchemy.com/v2/nPdtpY0LxgpMlnGOA94LoTCpEy-Nd2gG",
+                timeout: 60000
             }));
-
+            // {
+            //     address: 'https://devnet.irys.xyz',
+            //     providerUrl : 'https://solana-mainnet.g.alchemy.com/v2/nPdtpY0LxgpMlnGOA94LoTCpEy-Nd2gG',
+            //     // providerUrl: "https://api.devnet.solana.com",
+            //     // providerUrl: "https://cosmopolitan-greatest-wave.solana-mainnet.quiknode.pro/85222162e13661be38ab86fe26925e667496812d/",
+            //     timeout: 60000,
+            // }
+        console.log("metaplex ===>", metaplex);
         const mint_rent = await Token.getMinBalanceRentForExemptMint(connection);
         // Token.createSetAuthorityInstruction()
 
@@ -59,19 +74,26 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
         else {
             if (file) {
                 console.log("upload ===>");
-                const ImageUri = await metaplex.storage().upload(file);
-                console.log("imageuri ===>", ImageUri);
-                if (ImageUri) {
+                // let ImageUri;
+                // try {
+                //     ImageUri = await metaplex.storage().upload(file);
+                // } catch(err) {
+                //     console.log("upload error =====>", err);
+                // }
+                // console.log("imageuri ===>", ImageUri);
+                try {
                     const { uri } = await metaplex.nfts().uploadMetadata({
                         name: tokenName,
                         symbol: symbol,
                         description: description,
-                        image: ImageUri,
+                        image: file,
                     })
                     console.log("uri ===>", uri);
                     if (uri) {
                         URI = uri
                     }
+                } catch(err) {
+                    console.log("upload metadata ===>", err);
                 }
             }
             else {

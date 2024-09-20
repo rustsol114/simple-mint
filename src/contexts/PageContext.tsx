@@ -24,13 +24,14 @@ interface PageProviderProps {
 }
 
 export function PageProvider({ children }: PageProviderProps) {
-  const priceData = useQuery("repoData", () =>
-    fetch(SOL_PRICE_API).then(res => res.json())
-  );
+  // const priceData = useQuery("repoData", () =>
+  //   fetch(SOL_PRICE_API).then(res => res.json())
+  // );
 
-  const solPrice = priceData.data?.solana?.usd
-    ? priceData.data?.solana?.usd
-    : 57.5;
+  // const solPrice = priceData.data?.solana?.usd
+  //   ? priceData.data?.solana?.usd
+  //   : 57.5;
+  const solPrice = 57.5;
   const pageContextValue: PageContextType = {
     solPrice,
   };
