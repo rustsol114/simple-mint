@@ -2,6 +2,7 @@ import { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, } fro
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair, TransactionInstruction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { WalletContextState } from "@solana/wallet-adapter-react";
 import { MarketV2, DEVNET_PROGRAM_ID, TxVersion, MAINNET_PROGRAM_ID, TokenAccount, SPL_ACCOUNT_LAYOUT } from '@raydium-io/raydium-sdk';
+import { BN } from 'bn.js';
 
 // const marketProgramId = DEVNET_PROGRAM_ID.OPENBOOK_MARKET;
 const marketProgramId = MAINNET_PROGRAM_ID.OPENBOOK_MARKET;

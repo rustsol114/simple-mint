@@ -1,4 +1,4 @@
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, Token, AuthorityType} from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, createSetAuthorityInstruction, AuthorityType} from '@solana/spl-token';
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
 import { WalletContextState } from "@solana/wallet-adapter-react";
 
@@ -10,7 +10,7 @@ export async function revokeMintAuthority(
 ) {
     if(wallet.publicKey != null) {
         const transaction = new Transaction();
-        transaction.add(await Token.createSetAuthorityInstruction(TOKEN_PROGRAM_ID, mintAddress, null, "MintTokens", wallet.publicKey, []));
+        transaction.add(await createSetAuthorityInstruction(mintAddress, wallet.publicKey, 0, null,  [], TOKEN_PROGRAM_ID));
 
         transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
         transaction.feePayer = wallet.publicKey;

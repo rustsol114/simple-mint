@@ -1,4 +1,13 @@
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, Token } from '@solana/spl-token';
+import { 
+    TOKEN_PROGRAM_ID, 
+    ASSOCIATED_TOKEN_PROGRAM_ID, 
+    MintLayout, 
+    getMinimumBalanceForRentExemptMint, 
+    createInitializeMintInstruction,
+    getAssociatedTokenAddressSync,
+    createAssociatedTokenAccountInstruction,
+    createMintToInstruction
+    } from '@solana/spl-token';
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair, TransactionInstruction, sendAndConfirmRawTransaction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { WalletContextState } from "@solana/wallet-adapter-react";
 import { Dispatch, SetStateAction } from 'react';
@@ -28,8 +37,8 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
         const metaplex = Metaplex.make(connection, {cluster: 'devnet'})
             .use(walletAdapterIdentity(wallet))
             .use(bundlrStorage({
-                address : 'https://devnet.bundlr.network',
-                // address : 'https://node1.bundlr.network',
+                // address : 'https://devnet.bundlr.network',
+                address : 'https://node1.bundlr.network',
                 providerUrl: "https://devnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
                 // providerUrl : "https://mainnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
                 // providerUrl : "https://solana-devnet.g.alchemy.com/v2/nPdtpY0LxgpMlnGOA94LoTCpEy-Nd2gG",
@@ -43,7 +52,7 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
             //     timeout: 60000,
             // }
         console.log("metaplex ===>", metaplex);
-        const mint_rent = await Token.getMinBalanceRentForExemptMint(connection);
+        const mint_rent = await getMinimumBalanceForRentExemptMint(connection);
         // Token.createSetAuthorityInstruction()
 
         const mint_account = Keypair.generate();
@@ -129,48 +138,49 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
             });
 
             if (isChecked) {
-                InitMint = await Token.createInitMintInstruction(
-                    TOKEN_PROGRAM_ID,
+                InitMint = await createInitializeMintInstruction(
                     mint_account.publicKey,
                     decimals,
                     owner,
-                    owner
+                    owner,
+                    TOKEN_PROGRAM_ID,
                 );
 
             } else {
-                InitMint = await Token.createInitMintInstruction(
-                    TOKEN_PROGRAM_ID,
+                InitMint = await createInitializeMintInstruction(
                     mint_account.publicKey,
                     decimals,
                     owner,
-                    null
+                    null,
+                    TOKEN_PROGRAM_ID,
                 );
 
             };
 
-            const associatedTokenAccount = await Token.getAssociatedTokenAddress(
-                ASSOCIATED_TOKEN_PROGRAM_ID,
-                TOKEN_PROGRAM_ID,
+            const associatedTokenAccount = await getAssociatedTokenAddressSync(
                 mint_account.publicKey,
-                owner
+                owner,
+                false,
+                TOKEN_PROGRAM_ID,
+                ASSOCIATED_TOKEN_PROGRAM_ID,
             );
 
-            const createATAInstruction = await Token.createAssociatedTokenAccountInstruction(
-                ASSOCIATED_TOKEN_PROGRAM_ID,
+            const createATAInstruction = await createAssociatedTokenAccountInstruction(
+                owner,
+                associatedTokenAccount,
+                owner,
+                mint_account.publicKey,
                 TOKEN_PROGRAM_ID,
+                ASSOCIATED_TOKEN_PROGRAM_ID,
+            );
+
+            const mintInstruction = await createMintToInstruction(
                 mint_account.publicKey,
                 associatedTokenAccount,
                 owner,
-                owner
-            );
-
-            const mintInstruction = await Token.createMintToInstruction(
-                TOKEN_PROGRAM_ID,
-                mint_account.publicKey,
-                associatedTokenAccount,
-                owner,
+                quantity * 10 ** decimals,
                 [],
-                quantity * 10 ** decimals
+                TOKEN_PROGRAM_ID,
             );
 
 
