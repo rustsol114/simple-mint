@@ -13,8 +13,9 @@ import {
   ACCOUNT_SIZE,
   createInitializeAccountInstruction,
 } from "@solana/spl-token";
+import { WalletContextState } from "@solana/wallet-adapter-react";
 import * as BN from 'bn.js';
-import { DexInstructions, Market } from "@project-serum/serum";
+import { DexInstructions, Market } from "@openbook-dex/openbook";
 // import { LP_wallet_keypair, connection } from "../../config/config";
 import {
   calculateTotalAccountSize,
@@ -72,15 +73,18 @@ export async function getVaultOwnerAndNonce(
 
 export const createMarket = async (
   connection : Connection,
-  wallet: Keypair,
+  wallet: WalletContextState,
   baseMintAddress: PublicKey
 ) => {
+  console.log("start ====>")
   let baseMint: PublicKey;
   let baseMintDecimals: number;
   let quoteMint: PublicKey;
   let quoteMintDecimals: number;
   const vaultInstructions: TransactionInstruction[] = [];
   const marketInstructions: TransactionInstruction[] = [];
+
+  if(wallet.publicKey == null)  return null;
 
   try {
     const baseMintInfo = await getMint(connection, baseMintAddress);
@@ -92,7 +96,7 @@ export const createMarket = async (
     quoteMintDecimals = quoteMintInfo.decimals;
   } catch (e) {
     console.error("Invalid mints provided.", e);
-    return;
+    return null;
   }
 
   const marketAccounts = {
@@ -240,12 +244,31 @@ export const createMarket = async (
   try {
     let blockhash = (await connection.getLatestBlockhash("finalized"))
       .blockhash;
+    // const totalTransaction = new Transaction().add(...vaultInstructions, ...marketInstructions);
+    // totalTransaction.recentBlockhash = blockhash;
+    // totalTransaction.feePayer = wallet.publicKey;
+    // totalTransaction.sign(
+    //   marketAccounts.baseVault,
+    //   marketAccounts.quoteVault,
+    //   marketAccounts.market,
+    //   marketAccounts.requestQueue,
+    //   marketAccounts.eventQueue,
+    //   marketAccounts.bids,
+    //   marketAccounts.asks
+    // );
+
+    // const tx = await wallet.sendTransaction(totalTransaction, connection);
+
+    // console.log("tx ====>", tx);
+
+    // const transactionConfirmed = await connection.confirmTransaction(tx, 'confirmed');
+    // if(transactionConfirmed)  return marketAccounts.market.publicKey;
+    // return null;
 
     const createVaultTransaction = new Transaction().add(...vaultInstructions);
     createVaultTransaction.recentBlockhash = blockhash;
     createVaultTransaction.feePayer = wallet.publicKey;
     createVaultTransaction.sign(
-      wallet,
       marketAccounts.baseVault,
       marketAccounts.quoteVault
     );
@@ -256,13 +279,29 @@ export const createMarket = async (
     createMarketTransaction.recentBlockhash = blockhash;
     createMarketTransaction.feePayer = wallet.publicKey;
     createMarketTransaction.sign(
-      wallet,
       marketAccounts.market,
       marketAccounts.requestQueue,
       marketAccounts.eventQueue,
       marketAccounts.bids,
       marketAccounts.asks
     );
+
+    const tx = await wallet.sendTransaction(createVaultTransaction, connection);
+
+    console.log("Vault tx ====>", tx);
+
+    const transactionConfirmed = await connection.confirmTransaction(tx, 'confirmed');
+    if(transactionConfirmed) {
+        const tx1 = await wallet.sendTransaction(createMarketTransaction, connection);
+
+      console.log("Market tx ====>", tx1);
+
+      const transactionConfirmed = await connection.confirmTransaction(tx1, 'confirmed');
+      if(transactionConfirmed)  return marketAccounts.market.publicKey;
+      return null;
+    };
+    return null;
+
 
     // let success = await sendBundle([
     //   createVaultTransaction,

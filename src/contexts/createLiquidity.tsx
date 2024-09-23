@@ -1,10 +1,10 @@
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, Token } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout } from '@solana/spl-token';
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
 import { WalletContextState } from "@solana/wallet-adapter-react";
-import { Liquidity, TokenAccount, MAINNET_PROGRAM_ID, SPL_ACCOUNT_LAYOUT, TxVersion, ComputeBudgetConfig } from '@raydium-io/raydium-sdk';
+import { Liquidity, TokenAccount, MAINNET_PROGRAM_ID, DEVNET_PROGRAM_ID, SPL_ACCOUNT_LAYOUT, TxVersion, ComputeBudgetConfig } from '@raydium-io/raydium-sdk';
 import { BN } from '@project-serum/anchor';
 
-const raydiumProgram = MAINNET_PROGRAM_ID;
+const raydiumProgram = DEVNET_PROGRAM_ID;
 
 export async function createLiquidity(
     connection: Connection,
@@ -66,8 +66,8 @@ export async function createLiquidity(
                 computeBudgetConfig: budget,
                 checkCreateATAOwner: true,
                 makeTxVersion: TxVersion.LEGACY,
-                feeDestinationId: new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5")
-                // feeDestinationId: new PublicKey("34vTq3GQxK6pgEbhnrgU1zs27gPWS6ZttxrYofDR4EkD")
+                // feeDestinationId: new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5") //mainnet
+                feeDestinationId: new PublicKey("3XMrhbv989VxAMi3DErLV9eJht1pHppW5LbKxe9fkEFR") //devnet
             });
             console.log("innter transactions ===>", innerTransactions);
             // console.log('address ===>', address);

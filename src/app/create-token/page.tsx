@@ -11,13 +11,14 @@ import LandingHeader from '@/components/LandingHeader/LandingHeader';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MarketV2, DEVNET_PROGRAM_ID } from '@raydium-io/raydium-sdk';
-import { createMarket } from '@/contexts/createMarket';
+// import { createMarket } from '@/contexts/createMarket';
+import { createMarket } from '@/contexts/createMarket-main';
 import { PublicKey } from '@solana/web3.js';
 import { revokeMintAuthority } from '@/contexts/revokeMintAuthority';
 import { revokeFreezeAuthority } from '@/contexts/revokeFreezeAuthority';
 import { createLiquidity } from '@/contexts/createLiquidity';
 import { burnToken } from '@/contexts/burnToken';
-import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token';
 import { Snackbar } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 interface AlertState {
@@ -27,7 +28,7 @@ interface AlertState {
 }
 
 let mintAddress: PublicKey | undefined = undefined;
-let marketId: PublicKey | null = null;
+let marketId: PublicKey | null | undefined = null;
 let lpMint: PublicKey | null | undefined = null;
 
 export default function CreateToken() {
@@ -66,6 +67,8 @@ export default function CreateToken() {
     }
     const handleCreateToken = async () => {
 
+        // setStep(4);
+        // return;
         if (
             tokenName != "" &&
             tokenSymbol != "" &&
@@ -104,6 +107,7 @@ export default function CreateToken() {
     }
 
     const handleCreateMarket = async () => {
+        // const baseMint = new PublicKey('2Ma3C2h9C3UPYdBz3Yx2MajrUfCwt8z4GQUBNRsmeT5V');
         const baseMint = mintAddress != undefined ? mintAddress : new PublicKey("AXVANX9Exmoghok94dQkdLbQddpe9NjQkQ9heEcauDiF");
         const baseDecimal = tokenDecimal;
         const quoteMint = new PublicKey("So11111111111111111111111111111111111111112");
@@ -115,8 +119,9 @@ export default function CreateToken() {
             message: 'Loading...',
             severity: 'info',
         })
-        marketId = await createMarket(connection, wallet, baseMint, baseDecimal, quoteMint, quoteDecimal, orderSize, tickSize);
-        console.log("creating market id ====>", marketId);
+        // marketId = await createMarket(connection, wallet, baseMint, baseDecimal, quoteMint, quoteDecimal, orderSize, tickSize);
+        marketId = await createMarket(connection, wallet, baseMint);
+        console.log("creating market id ====>", marketId?.toBase58());
         setAlertState({
             open: false,
             message: 'Done',
@@ -289,7 +294,7 @@ export default function CreateToken() {
         }
         const mint = lpMint;
         console.log('lpMint ===>', lpMint);
-        const tokenAccountAddress = await Token.getAssociatedTokenAddress(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, mint, wallet.publicKey);
+        const tokenAccountAddress = await getAssociatedTokenAddressSync(mint, wallet.publicKey, false, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID,);
         console.log('tokenAccountAddress ===>', tokenAccountAddress.toBase58());
         setAlertState({
             open: true,
@@ -302,7 +307,7 @@ export default function CreateToken() {
             message: 'Done',
             severity: 'info',
         })
-        router.push('my-token');
+        router.push('');
     }
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -409,7 +414,7 @@ export default function CreateToken() {
                                 Create Token Fee
                             </div>
                             <div className='text-white font-semibold text-sm'>
-                                0.62 Sol
+                                0.02 Sol
                             </div>
                         </div>
                         <button

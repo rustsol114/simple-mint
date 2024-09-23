@@ -1,4 +1,4 @@
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, Token } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, MintLayout, createBurnInstruction } from '@solana/spl-token';
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair, TransactionInstruction, sendAndConfirmRawTransaction } from '@solana/web3.js';
 import { WalletContextState } from "@solana/wallet-adapter-react";
 
@@ -16,7 +16,7 @@ export async function burnToken(
             alert("amount is 0");
             return;
         }
-        const burnInstruction = Token.createBurnInstruction(TOKEN_PROGRAM_ID, mintAddress, tokenAccount, wallet.publicKey, [], amount.value.uiAmount * 10 ** amount.value.decimals);
+        const burnInstruction = createBurnInstruction(tokenAccount, mintAddress,  wallet.publicKey, amount.value.uiAmount * 10 ** amount.value.decimals, [], TOKEN_PROGRAM_ID);
         const transaction = new Transaction();
         transaction.add(burnInstruction);
         const lastBlockHash = await connection.getLatestBlockhash();
