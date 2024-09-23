@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ConnectButton from "@/components/ConnectButton";
 import Header from "@/components/Header";
 // import { useWallet } from "@solana/wallet-adapter-react";
@@ -48,6 +48,7 @@ export default function CreateToken() {
         message: '',
         severity: undefined,
     })
+    const [marketPrice, setMarketPrice] = useState<number>(0);
     // const [isShowOrigin, setIsShowOrigin] = useState(false);
     // const wallet = useWallet();
     // const [loading, setLoading] = useState(false);
@@ -62,12 +63,19 @@ export default function CreateToken() {
     //   }
     // };
     const [step, setStep] = useState(1);
+
+    useEffect(()=> {
+        const input = document.getElementsByName('market_price');
+        console.log("input ===>", input);
+    }, [])
+
+
     const sendLanding = () => {
         router.push('/');
     }
     const handleCreateToken = async () => {
 
-        // setStep(4);
+        // setStep(2);
         // return;
         if (
             tokenName != "" &&
@@ -107,7 +115,21 @@ export default function CreateToken() {
     }
 
     const handleCreateMarket = async () => {
-        // const baseMint = new PublicKey('2Ma3C2h9C3UPYdBz3Yx2MajrUfCwt8z4GQUBNRsmeT5V');
+        // setStep(5);
+        // alert(marketPrice);
+        // return ;
+
+        if(marketPrice == 0) {
+            setAlertState({
+                open: true,
+                message: 'You have to set market option...',
+                severity: 'error',
+            });
+            // setTimeout(() => {}, 3000);
+            return ;
+        }
+
+        // const baseMint = new PublicKey('EaGjiUc41cfz45EBGC95ALXdi8MhJcdTPk35kQtT5pJc');
         const baseMint = mintAddress != undefined ? mintAddress : new PublicKey("AXVANX9Exmoghok94dQkdLbQddpe9NjQkQ9heEcauDiF");
         const baseDecimal = tokenDecimal;
         const quoteMint = new PublicKey("So11111111111111111111111111111111111111112");
@@ -120,7 +142,7 @@ export default function CreateToken() {
             severity: 'info',
         })
         // marketId = await createMarket(connection, wallet, baseMint, baseDecimal, quoteMint, quoteDecimal, orderSize, tickSize);
-        marketId = await createMarket(connection, wallet, baseMint);
+        marketId = await createMarket(connection, wallet, baseMint, marketPrice);
         console.log("creating market id ====>", marketId?.toBase58());
         setAlertState({
             open: false,
@@ -161,6 +183,8 @@ export default function CreateToken() {
     }
 
     const clickRevokeMint = async () => {
+        // setStep(3);
+        // return;
         if (mintAddress == undefined) {
             setAlertState({
                 open: true,
@@ -196,6 +220,8 @@ export default function CreateToken() {
     }
 
     const clickRevokeFreeze = async () => {
+        // setStep(4);
+        // return;
         if (mintAddress == undefined) {
             setAlertState({
                 open: true,
@@ -227,6 +253,8 @@ export default function CreateToken() {
     // marketId : krnKbe4BiwN7rDDhto1kmnxJttXPnM5u8JDYbMSUL93
     // AMM Id : DeaKJBnzRZEEGwfx9TLUSd6YHZuFqtLV9zCUj5PY8Aw8
     const clickAddLiquidity = async () => {
+        // setStep(6);
+        // return ;
         if (marketId == undefined) {
             setAlertState({
                 open: true,
@@ -274,6 +302,8 @@ export default function CreateToken() {
     }
 
     const clickBurnToken = async () => {
+        // setStep(1);
+        // return;
         if (wallet.publicKey == null) {
             setAlertState({
                 open: true,
@@ -307,10 +337,13 @@ export default function CreateToken() {
             message: 'Done',
             severity: 'info',
         })
-        router.push('');
+        setStep(1);
     }
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const radioInputRef1 = useRef<HTMLInputElement>(null);
+    const radioInputRef2 = useRef<HTMLInputElement>(null);
+    const radioInputRef3 = useRef<HTMLInputElement>(null);
     const handleBig = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -420,7 +453,6 @@ export default function CreateToken() {
                         <button
                             className="w-full py-3 px-6 text-[white] text-sm font-semibold text-center rounded-xl bg-primary-200"
                             onClick={handleCreateToken}
-
                         >
                             Create
                         </button>
@@ -446,7 +478,7 @@ export default function CreateToken() {
                                     className='object-cover object-center w-8 h-8'
                                 />
                                 <p className='truncate w-[90%] text-sm'>
-                                    {wallet.publicKey?.toBase58()}
+                                    {mintAddress != undefined ? mintAddress.toBase58() : wallet.publicKey?.toBase58()}
                                 </p>
                             </div>
                         </div>
@@ -486,7 +518,7 @@ export default function CreateToken() {
                                     className='object-cover object-center w-8 h-8'
                                 />
                                 <p className='truncate w-[90%] text-sm'>
-                                    {wallet.publicKey?.toBase58()}
+                                {mintAddress != undefined ? mintAddress.toBase58() : wallet.publicKey?.toBase58()}
                                 </p>
                             </div>
                         </div>
@@ -536,7 +568,7 @@ export default function CreateToken() {
                                     className='object-cover object-center w-8 h-8'
                                 />
                                 <p className='truncate w-[90%] text-sm'>
-                                    {wallet.publicKey?.toBase58()}
+                                    {mintAddress != undefined ? mintAddress.toBase58() : wallet.publicKey?.toBase58()}
                                 </p>
                             </div>
                         </div>
@@ -591,17 +623,28 @@ export default function CreateToken() {
                                     className='object-cover object-center w-8 h-8'
                                 />
                                 <p className='truncate w-[90%]'>
-                                    {wallet.publicKey?.toBase58()}
+                                    {mintAddress != undefined ? mintAddress.toBase58() : wallet.publicKey?.toBase58()}
                                 </p>
                             </div>
                         </div>
-                        <div className='flex items-center justify-between'>
+                        <div className='flex items-center justify-between text-white'>
                             <div className='text-secondary-400 text-sm font-normal'>
                                 Create Market Fee
                             </div>
-                            <div className='text-white font-semibold text-sm'>
-                                2.7 Sol
+                            {/* <div className='text-white font-semibold text-sm'> */}
+                            <div>
+                                <input type="radio" ref={radioInputRef1} id="html" name="market_price" value="0.4" onClick={(e) => setMarketPrice(1)} />
+                                <label className="pl-[7px]" onClick={(e) => {if(radioInputRef1.current) radioInputRef1.current.click()}}>0.4 Sol</label>
                             </div>
+                            <div>
+                                <input type="radio" ref={radioInputRef2} id="css" name="market_price" value="1.5" onClick={(e) => setMarketPrice(2)} />
+                                <label className="pl-[7px]" onClick={(e) => {if(radioInputRef2.current) radioInputRef2.current.click()}}>1.5 Sol</label>
+                            </div>
+                            <div>
+                                <input type="radio" ref={radioInputRef3} id="javascript" name="market_price" value="2.7" onClick={(e) => setMarketPrice(3)} />
+                                <label className="pl-[7px]" onClick={(e) => {if(radioInputRef3.current) radioInputRef3.current.click()}}>2.7 Sol</label>
+                            </div>
+                            {/* </div> */}
                         </div>
                         <button
                             className="w-full py-3 px-6 text-[white] text-sm font-semibold text-center rounded-xl bg-primary-200"
@@ -688,7 +731,7 @@ export default function CreateToken() {
             }
             <Snackbar
                 open={alertState.open}
-                autoHideDuration={6000}
+                autoHideDuration={20000}
                 onClose={() => setAlertState({ ...alertState, open: false })}
             >
                 <Alert

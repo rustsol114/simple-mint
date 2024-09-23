@@ -26,23 +26,6 @@ export default function LandingHeader() {
                         height={39}
                     />
                     </Link>
-                    <div className='hidden md:flex text-xs lg:text-sm xl:text-base items-center text-[white] font-semibold'>
-                        <Link href='/create-token' className={` ${pathName == '/create-token' && 'text-primary-200'} py-2 px-2 xl:px-4 hover:text-primary-200`}>
-                            Create Token
-                        </Link>
-                        <Link href='my-token' className={` ${pathName == '/my-token' && 'text-primary-200'} py-2 px-2 xl:px-4 hover:text-primary-200`}>
-                            My Tokens
-                        </Link>
-                        <Link href='/' className={` ${pathName == '/hot-token' && 'text-primary-200'} py-2 px-2 xl:px-4 hover:text-primary-200`}>
-                            Hot Tokens
-                        </Link>
-                        <Link href='/faq' className={` ${pathName == '/faq' && 'text-primary-200'} py-2 px-2 xl:px-4 hover:text-primary-200`}>
-                            FAQ
-                        </Link>
-                        <Link href='/#contact' className={` ${pathName == '/contact' && 'text-primary-200'} py-2 px-2 xl:px-4 hover:text-primary-200`}>
-                            Contact
-                        </Link>
-                    </div>
                     {
                         showSideBar ? (
                             <Image
@@ -55,7 +38,7 @@ export default function LandingHeader() {
                         ) : (
                             <div className='flex items-center gap-2 lg:gap-4'>
                                 <div className='hidden lg:flex items-center gap-2 lg:gap-4'>
-                                    <Link href='https://x.com/miragelaunchpad?s=21&t=cy46oI2IX70z78oS7znwTg'>
+                                    <Link href='https://x.com/'>
                                         <Image
                                             src='/icons/twitter.svg'
                                             alt='twitter'
@@ -63,7 +46,7 @@ export default function LandingHeader() {
                                             height={22}
                                         />
                                     </Link>
-                                    <Link href='https://t.me/miragelaunchpad'>
+                                    <Link href='https://t.me/'>
                                         <Image
                                             src='/icons/Telegram.svg'
                                             alt='telegram'
@@ -71,7 +54,7 @@ export default function LandingHeader() {
                                             height={24}
                                         />
                                     </Link>
-                                    <Link href='https://discord.gg/c89NbRqzmq'>
+                                    <Link href='https://discord.gg/'>
                                         <Image
                                             src='/icons/discord.svg'
                                             alt='discord'

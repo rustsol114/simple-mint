@@ -34,23 +34,14 @@ const SOL_TOKEN_ADDR = new PublicKey(
 
 const LOT_SIZE = -3;
 const TICK_SIZE = 8;
-const TOTAL_EVENT_QUEUE_SIZE = calculateTotalAccountSize(
-  128,
-  EVENT_QUEUE_HEADER_SIZE,
-  EVENT_SIZE
-);
+const lengthList = [
+  { event: 128, request: 10, order: 201 },
+  { event: 1400, request: 63, order: 450 },
+  { event: 2978, request: 63, order: 909 }
+];
 
-const TOTAL_REQUEST_QUEUE_SIZE = calculateTotalAccountSize(
-  10,
-  REQUEST_QUEUE_HEADER_SIZE,
-  REQUEST_SIZE
-);
 
-const TOTAL_ORDER_BOOK_SIZE = calculateTotalAccountSize(
-  201,
-  ORDERBOOK_HEADER_SIZE,
-  ORDERBOOK_NODE_SIZE
-);
+
 
 export async function getVaultOwnerAndNonce(
   marketAddress: PublicKey,
@@ -74,8 +65,34 @@ export async function getVaultOwnerAndNonce(
 export const createMarket = async (
   connection : Connection,
   wallet: WalletContextState,
-  baseMintAddress: PublicKey
+  baseMintAddress: PublicKey,
+  marketPrice : number
 ) => {
+  console.log(lengthList[marketPrice-1].event, lengthList[marketPrice-1].request, lengthList[marketPrice-1].order);
+
+
+  const TOTAL_EVENT_QUEUE_SIZE = calculateTotalAccountSize(
+    lengthList[marketPrice-1].event,
+    // 128,
+    EVENT_QUEUE_HEADER_SIZE,
+    EVENT_SIZE
+  );
+  
+  const TOTAL_REQUEST_QUEUE_SIZE = calculateTotalAccountSize(
+    lengthList[marketPrice-1].request,
+    // 10,
+    REQUEST_QUEUE_HEADER_SIZE,
+    REQUEST_SIZE
+  );
+  
+  const TOTAL_ORDER_BOOK_SIZE = calculateTotalAccountSize(
+    lengthList[marketPrice-1].order,
+    // 201,
+    ORDERBOOK_HEADER_SIZE,
+    ORDERBOOK_NODE_SIZE
+  );
+
+
   console.log("start ====>")
   let baseMint: PublicKey;
   let baseMintDecimals: number;
@@ -98,7 +115,7 @@ export const createMarket = async (
     console.error("Invalid mints provided.", e);
     return null;
   }
-
+  console.log("marketAccounts ===>")
   const marketAccounts = {
     market: Keypair.generate(),
     requestQueue: Keypair.generate(),
@@ -114,6 +131,7 @@ export const createMarket = async (
     DEVNET_PROGRAM_ID.OPENBOOK_MARKET
   );
 
+  console.log("vaultInstructions ===>")
   // create vaults
   vaultInstructions.push(
     SystemProgram.createAccount({
@@ -156,6 +174,7 @@ export const createMarket = async (
       Math.pow(10, -1 * TICK_SIZE)
   );
 
+  console.log("marketInstructions ===>");
   // create market account
   marketInstructions.push(
     SystemProgram.createAccount({
