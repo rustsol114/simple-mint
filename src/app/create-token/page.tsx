@@ -698,7 +698,7 @@ export default function CreateToken() {
                                 />
                                 <div className='flex flex-col font-normal'>
                                     <div className='text-sm'>
-                                        CRC Token - Sol
+                                        LP Token
                                     </div>
                                     <div className='text-xs text-secondary-900'>
                                         <span>

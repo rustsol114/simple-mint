@@ -128,7 +128,7 @@ export const createMarket = async (
 
   const [vaultOwner, vaultOwnerNonce] = await getVaultOwnerAndNonce(
     marketAccounts.market.publicKey,
-    DEVNET_PROGRAM_ID.OPENBOOK_MARKET
+    MAINNET_PROGRAM_ID.OPENBOOK_MARKET
   );
 
   console.log("vaultInstructions ===>")
@@ -180,11 +180,11 @@ export const createMarket = async (
     SystemProgram.createAccount({
       newAccountPubkey: marketAccounts.market.publicKey,
       fromPubkey: wallet.publicKey,
-      space: Market.getLayout(DEVNET_PROGRAM_ID.OPENBOOK_MARKET).span,
+      space: Market.getLayout(MAINNET_PROGRAM_ID.OPENBOOK_MARKET).span,
       lamports: await connection.getMinimumBalanceForRentExemption(
-        Market.getLayout(DEVNET_PROGRAM_ID.OPENBOOK_MARKET).span
+        Market.getLayout(MAINNET_PROGRAM_ID.OPENBOOK_MARKET).span
       ),
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
 
@@ -197,7 +197,7 @@ export const createMarket = async (
       lamports: await connection.getMinimumBalanceForRentExemption(
         TOTAL_REQUEST_QUEUE_SIZE
       ),
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
 
@@ -210,7 +210,7 @@ export const createMarket = async (
       lamports: await connection.getMinimumBalanceForRentExemption(
         TOTAL_EVENT_QUEUE_SIZE
       ),
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
 
@@ -224,7 +224,7 @@ export const createMarket = async (
       fromPubkey: wallet.publicKey,
       space: TOTAL_ORDER_BOOK_SIZE,
       lamports: orderBookRentExempt,
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
 
@@ -235,7 +235,7 @@ export const createMarket = async (
       fromPubkey: wallet.publicKey,
       space: TOTAL_ORDER_BOOK_SIZE,
       lamports: orderBookRentExempt,
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
 
@@ -255,7 +255,7 @@ export const createMarket = async (
       feeRateBps: 150, // Unused in v3
       quoteDustThreshold: new BN.BN(500), // Unused in v3
       vaultSignerNonce: vaultOwnerNonce,
-      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET,
+      programId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
     })
   );
   console.log("Trnasactions for market creation is ready, sending transactions")

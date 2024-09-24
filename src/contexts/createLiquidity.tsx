@@ -4,7 +4,8 @@ import { WalletContextState } from "@solana/wallet-adapter-react";
 import { Liquidity, TokenAccount, MAINNET_PROGRAM_ID, DEVNET_PROGRAM_ID, SPL_ACCOUNT_LAYOUT, TxVersion, ComputeBudgetConfig } from '@raydium-io/raydium-sdk';
 import { BN } from '@project-serum/anchor';
 
-const raydiumProgram = DEVNET_PROGRAM_ID;
+// const raydiumProgram = DEVNET_PROGRAM_ID;
+const raydiumProgram = MAINNET_PROGRAM_ID;
 
 export async function createLiquidity(
     connection: Connection,

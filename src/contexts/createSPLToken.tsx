@@ -34,13 +34,13 @@ export async function createSPLToken(owner: PublicKey, wallet: WalletContextStat
             console.log("balance ===>", balance);
         }
 
-        const metaplex = Metaplex.make(connection, {cluster: 'devnet'})
+        const metaplex = Metaplex.make(connection, {cluster: 'mainnet-beta'})
             .use(walletAdapterIdentity(wallet))
             .use(bundlrStorage({
                 // address : 'https://devnet.bundlr.network',
                 address : 'https://node1.bundlr.network',
-                providerUrl: "https://devnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
-                // providerUrl : "https://mainnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
+                // providerUrl: "https://devnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
+                providerUrl : "https://mainnet.helius-rpc.com/?api-key=934757b5-6bfc-49d7-a577-b40b81662855",
                 // providerUrl : "https://solana-devnet.g.alchemy.com/v2/nPdtpY0LxgpMlnGOA94LoTCpEy-Nd2gG",
                 timeout: 60000
             }));
