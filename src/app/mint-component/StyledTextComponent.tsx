@@ -3,7 +3,12 @@ import React from 'react';
 
 const StyledTextComponent = () => {
   return (
-    <div style={styles.container}>
+    <div style={{padding: '20px',
+          borderRadius: '10px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          textAlign: 'center',
+          margin: '20px auto',
+          maxWidth: '600px',}}>
       <h1 style={styles.title}>Presale Live</h1>
       <h2 style={styles.subtitle}>Meme Ape</h2>
       <h3 style={styles.joinHeader}>JOIN THE MEME REVOLUTION</h3>
