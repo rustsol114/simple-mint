@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import StyledTextComponent from './StyledTextComponent';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
