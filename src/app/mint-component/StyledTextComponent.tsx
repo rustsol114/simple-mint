@@ -9,14 +9,14 @@ const StyledTextComponent = () => {
           textAlign: 'center',
           margin: '20px auto',
           maxWidth: '600px',}}>
-      <h1 style={styles.title}>Presale Live</h1>
-      <h2 style={styles.subtitle}>Meme Ape</h2>
-      <h3 style={styles.joinHeader}>JOIN THE MEME REVOLUTION</h3>
-      <p style={{fontFamily: "Impact", color: 'white', fontStyle: 'italic'}}>
-        With every memecoin unified, we empower the crypto community with a single currency to rule them all where the main goal is to support animal welfare organizations and making a real-world impact.
-      </p>
+      <h1 style={styles.title}>Solana Blockchain keeps your SOL!</h1>
+      <h2 style={styles.subtitle}>You can get it back!</h2>
+      {/* <h3 style={styles.joinHeader}>JOIN THE MEME REVOLUTION</h3> */}
+      {/* <p style={{fontFamily: "Impact", color: 'white', fontStyle: 'italic'}}>
+      Share with your friends and receive 20% of the included donation!
+      </p> */}
       <p style={styles.mintMessage}>
-        Mint an NFT now and get airdrop from our tokens!
+      Share with your friends and receive 20% of the included donation!
       </p>
     </div>
   );

