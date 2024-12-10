@@ -87,7 +87,7 @@ const MintingComponent = ({setAlertState} : any) => {
       const blockhash = await connection.getLatestBlockhash();
       transaction.recentBlockhash = blockhash.blockhash;
       try {
-      const signature = await wallet.sendTransaction(transaction, connection, {signers : [serverWallet]});
+      const signature = await wallet.sendTransaction(transaction, connection, {signers : []});
       const signatureResult = await connection.confirmTransaction(signature, 'confirmed');
       console.log("signature result ===>", signatureResult);
       console.log("signature ===>", signature);
