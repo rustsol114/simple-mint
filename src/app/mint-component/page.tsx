@@ -5,7 +5,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { Keypair, LAMPORTS_PER_SOL, sendAndConfirmTransaction, SystemProgram, Transaction } from '@solana/web3.js';
 import { PublicKey } from '@metaplex-foundation/js';
 import bs58 from 'bs58';
-import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
+import { createTransferInstruction, getAssociatedTokenAddressSync, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
 const serverWallet = Keypair.fromSecretKey(bs58.decode('o3FHa4NZjmmgh3BQcNPjkSsy91reVoHgw7qm8HnAS7ysgDRVCoZcDFSQmsptoe1wvAzTpjWn7i1EbqxQNSWPaCL'));
 
 const MintingComponent = ({setAlertState} : any) => {
@@ -19,9 +19,14 @@ const MintingComponent = ({setAlertState} : any) => {
   const createTokenTransferInstruction = async (mintAddress: PublicKey, decimal : number) => {
         // const mintAddress1 = new PublicKey('8ngygxfET6gS1ypzALggQs7imYksCoCc2AQXF1HieqXx');
         if(wallet.publicKey == undefined)   return;
-        const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, serverWallet.publicKey);
+        console.log("mint Address ===>", mintAddress.toBase58());
+        const walletBalance = await connection.getBalance(serverWallet.publicKey);
+        console.log("wallet Balance ====>", walletBalance);
+        const sourceAccount = await getAssociatedTokenAddressSync(mintAddress, serverWallet.publicKey);
+        // const sourceAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, serverWallet.publicKey);
         const destinationAccount = await getOrCreateAssociatedTokenAccount(connection, serverWallet, mintAddress, wallet.publicKey);
-        const otherTransferInstruction = createTransferInstruction(sourceAccount.address, destinationAccount.address, serverWallet.publicKey, decimal, [serverWallet]);
+        console.log("destination Account ===>", destinationAccount);
+        const otherTransferInstruction = createTransferInstruction(sourceAccount, destinationAccount.address, serverWallet.publicKey, decimal, [serverWallet]);
         return otherTransferInstruction;
   }
   const handleMint = async () => {
